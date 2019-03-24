@@ -53,6 +53,7 @@ public class ChatServer {
                     if (messageTokens[1].equals("LOGOUT")) {
                         clientSockets.remove(logins.indexOf(messageTokens[0]));
                         logins.remove(messageTokens[0]);
+                        break;
                     }
                 } catch (IOException i) {
                     i.printStackTrace();

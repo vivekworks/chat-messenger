@@ -1,6 +1,7 @@
 package com.chat;
 
 import javax.swing.*;
+import java.awt.event.*;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -42,14 +43,25 @@ public class ChatClient extends JFrame implements Runnable {
         panel.add(sendButton);
         panel.add(logoutButton);
         getContentPane().add(panel);
-        sendButton.addActionListener((event) -> {
-            try {
-                dataOut.writeUTF(loginName + ": _DATA_ " + textField.getText());
-            } catch (IOException e) {
-                e.printStackTrace();
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    sendChat(null);
+                }
             }
-            textField.setText("");
         });
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                try {
+                    dataOut.writeUTF(loginName + "_LOGOUT_has logged out.");
+                } catch (IOException o) {
+                    o.printStackTrace();
+                }
+            }
+        });
+        sendButton.addActionListener(this::sendChat);
         logoutButton.addActionListener((event) -> {
             try {
                 dataOut.writeUTF(loginName + "_LOGOUT_has logged out.");
@@ -73,5 +85,15 @@ public class ChatClient extends JFrame implements Runnable {
         }
     }
 
+    void sendChat(ActionEvent event) {
+        if (textField.getText() != null && !textField.getText().equals("")) {
+            try {
+                dataOut.writeUTF(loginName + ": _DATA_ " + textField.getText());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            textField.setText("");
+        }
+    }
 
 }

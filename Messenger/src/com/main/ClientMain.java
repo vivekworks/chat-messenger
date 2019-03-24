@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.io.IOException;
 
 public class ClientMain extends JFrame {
@@ -39,13 +38,15 @@ public class ClientMain extends JFrame {
         new ClientMain();
     }
 
-    public void login(ActionEvent event){
-        try {
-            new ChatClient(userName.getText());
-            setVisible(false);
-            dispose();
-        } catch (IOException i) {
-            i.printStackTrace();
+    public void login(ActionEvent event) {
+        if (userName.getText() != null && !userName.getText().equals("")) {
+            try {
+                new ChatClient(userName.getText());
+                setVisible(false);
+                dispose();
+            } catch (IOException i) {
+                i.printStackTrace();
+            }
         }
     }
 }
